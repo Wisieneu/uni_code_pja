@@ -8,8 +8,10 @@ Repo for easy storage of all my coding labs done during PJATK information techno
 - repo divided into semesters, then by classes
 - notes in polish
 
-### Semester no. 1
+## Semester no. 1
 
 - PPJ - programming basics in java
 
-### Semester no. 2
+## Semester no. 2
+
+yet to start
