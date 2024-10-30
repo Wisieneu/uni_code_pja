@@ -11,6 +11,7 @@ Repo for easy storage of all my coding labs done during PJATK information techno
 ## Semester no. 1
 
 - PPJ - programming basics in java
+  - educator: MT
 
 ## Semester no. 2
 

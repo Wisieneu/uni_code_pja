@@ -3,13 +3,10 @@ public class S34380 {
     int a = 3;
     int b = 3;
     
-    if (!(a>b) && !(a<b)){
-      System.out.println("condition met");
-    }
+    boolean wynik = !(a>b) && !(a<b); // pierwotnie, z zadania
+    wynik = a==b; 
+    wynik = a<=b && a>=b; // alternatywnie 
 
-    // alternatywnie
-    if (a==b) {
-      System.out.println("condition met");
-    }
+    System.out.println(wynik ? "warunek spełniony" : "warunek niespełniony");
   }
 }
