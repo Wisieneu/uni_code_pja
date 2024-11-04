@@ -1,6 +1,6 @@
 # code_uni
 
-Repo for easy storage of all my coding labs done during PJATK information technology education
+Repo for easy storage of all my coding labs done during PJATK information technology uni classes
 
 ## Notes
 
