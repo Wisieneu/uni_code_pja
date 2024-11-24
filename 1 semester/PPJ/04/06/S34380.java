@@ -1,4 +1,5 @@
 public class S34380 {
+
   public void method() {
     int M = 9;
     int D = 23;
@@ -11,9 +12,9 @@ public class S34380 {
         System.out.println("Zima");
         break;
       case 3:
-        if (D>=1 && D<=20) { // do 20 marca
+        if (D >= 1 && D <= 20) { // do 20 marca
           System.out.println("Zima");
-        } else if (D>=21 && D<=31) {
+        } else if (D >= 21 && D <= 31) {
           System.out.println("Wiosna");
         }
         break;
@@ -24,9 +25,9 @@ public class S34380 {
         System.out.println("Wiosna");
         break;
       case 6:
-        if (D>=1 && D<=20) { // do 20 czerwca
+        if (D >= 1 && D <= 20) { // do 20 czerwca
           System.out.println("Wiosna");
-        } else if (D>=21 && D<=30) {
+        } else if (D >= 21 && D <= 30) {
           System.out.println("Lato");
         }
         break;
@@ -37,9 +38,9 @@ public class S34380 {
         System.out.println("Lato");
         break;
       case 9:
-        if (D>=1 && D<=22) { // do 22 września
+        if (D >= 1 && D <= 22) { // do 22 września
           System.out.println("Lato");
-        } else if (D>=23 && D<=31) {
+        } else if (D >= 23 && D <= 31) {
           System.out.println("Jesień");
         }
         break;
@@ -50,9 +51,9 @@ public class S34380 {
         System.out.println("Jesień");
         break;
       case 12:
-        if (D>=1 && D<=21) { // do 21 grudnia
+        if (D >= 1 && D <= 21) { // do 21 grudnia
           System.out.println("Jesień");
-        } else if (D>=22 && D<=31) {
+        } else if (D >= 22 && D <= 31) {
           System.out.println("Zima");
         }
         break;

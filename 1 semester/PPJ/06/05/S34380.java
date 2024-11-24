@@ -1,4 +1,5 @@
 public class S34380 {
+
   public void method() {
     int tab[];
     System.out.println(tab);

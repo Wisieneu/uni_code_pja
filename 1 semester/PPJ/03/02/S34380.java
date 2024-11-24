@@ -1,4 +1,5 @@
 public class S34380 {
+
   public void method() {
     boolean bool1 = true;
     int int1 = 122;
@@ -6,7 +7,7 @@ public class S34380 {
     char char1 = 'e';
 
     // porównania, które są niemożliwe:
-    // System.out.println(bool1 == int1); 
+    // System.out.println(bool1 == int1);
     // System.out.println(bool1 == char1);
     // System.out.println(bool1 == double1);
 
