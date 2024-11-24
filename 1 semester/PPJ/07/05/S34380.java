@@ -1,5 +1,5 @@
-public class Test {
-  public static void main(String[] args) {
+public class S34380 {
+  public void method() {
     char[][] chars = new char['z' - 'a']['z' - 'a'];
 
     for (int i = 0; i < chars.length; i++) {
