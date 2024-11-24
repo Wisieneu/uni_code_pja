@@ -7,6 +7,7 @@ Repo for easy storage of all my coding labs done during PJATK information techno
 - started in winter 2024
 - repo divided into semesters, then by classes
 - notes in polish
+- using `package.json` here as its easier for me to manage different programming languages' formatters in vscode (yes, I'd rather die than switch IDEs, I'm a busy man)
 
 ## Semester no. 1
 
