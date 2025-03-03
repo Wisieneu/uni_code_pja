@@ -1,5 +1,4 @@
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
@@ -10,13 +9,13 @@ public class Main {
         fileInput = fileInput.replaceAll("\\n", "");
         String[] numbers = fileInput.split("\\s");
 
-        // wyswietlenie wszystkich
+        // printing all
         for (String i: numbers) {
             System.out.print(i+ " ");
         }
         System.out.println();
 
-        // wartosc max
+        // value of max
         int max = Integer.MIN_VALUE;
         for (String j: numbers) {
             int val = Integer.parseInt(j);
@@ -24,7 +23,7 @@ public class Main {
         }
         System.out.println(max);
 
-        // indeksy max value
+        // index of max value
         for (int k = 0; k < numbers.length; k++) {
             if (Integer.parseInt(numbers[k]) == max) System.out.print(k + " ");
         }
