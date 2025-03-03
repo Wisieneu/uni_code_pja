@@ -16,4 +16,5 @@ Repo for easy storage of all my coding labs done during PJATK information techno
 
 ## Semester no. 2
 
-yet to start
+- GUI - Object-oriented programming and GUI
+  - educator: AD
