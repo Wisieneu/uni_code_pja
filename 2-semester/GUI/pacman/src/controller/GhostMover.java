@@ -5,7 +5,7 @@ import entities.Ghost;
 import java.util.List;
 
 public class GhostMover extends Thread {
-    private volatile boolean running = true; // volatile = will be modified by different threads
+    private boolean running = true;
 
     private final Ghost ghost;
 
@@ -20,16 +20,18 @@ public class GhostMover extends Thread {
     @Override
     public void run() {
         try {
-            Thread.sleep(2500);
+            Thread.sleep(4000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         while (running && GameController.instance != null) {
             synchronized (GameController.instance.getMapModel()) {
-                ghost.moveDirectlyTowardsPacman();
+                try {
+                    ghost.moveDirectlyTowardsPacman();
+                } finally {}
             }
             try {
-                Thread.sleep(400);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

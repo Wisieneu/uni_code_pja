@@ -7,14 +7,18 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class ResizeHandler extends ComponentAdapter {
-    private JTable mapTable;
-    private JScrollPane scrollPane;
-    private int COLS;
-    private int ROWS;
+    private final JTable mapTable;
+    private final JScrollPane scrollPane;
+    private final GameView gameView;
+    private final int COLS;
+    private final int ROWS;
 
-    public ResizeHandler(JTable mapTable, JScrollPane scrollPane) {
+    private int lastRenderedAt;
+
+    public ResizeHandler(JTable mapTable, JScrollPane scrollPane, GameView gameView) {
         this.mapTable = mapTable;
         this.scrollPane = scrollPane;
+        this.gameView = gameView;
         this.COLS = mapTable.getColumnCount();
         this.ROWS = mapTable.getRowCount();
     }
@@ -28,6 +32,10 @@ public class ResizeHandler extends ComponentAdapter {
 
         // Take the shorter side as square size:
         int cellSize = Math.min(cellWidth, cellHeight);
+        gameView.setCellSize(cellSize);
+        if (this.lastRenderedAt == cellSize) return; // to avoid rendering multiple times at the same time with the same effect
+        this.lastRenderedAt = cellSize;
+
 
         int tableWidth = cellSize * COLS;
         int tableHeight = cellSize * ROWS;
@@ -44,5 +52,7 @@ public class ResizeHandler extends ComponentAdapter {
         mapTable.setPreferredScrollableViewportSize(new Dimension(tableWidth, tableHeight));
 
         mapTable.revalidate();
+
+        gameView.loadImages();
     }
 }

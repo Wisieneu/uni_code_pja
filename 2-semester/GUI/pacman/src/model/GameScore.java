@@ -50,6 +50,10 @@ public class GameScore {
         this.gameTime = newGameTime;
     }
 
+    public void addLife() {
+        this.lives++;
+    }
+
     public void reduceLife() {
         this.lives--;
         if (this.lives == 0)

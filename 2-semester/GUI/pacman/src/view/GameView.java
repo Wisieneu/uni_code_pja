@@ -6,15 +6,20 @@ import model.CellType;
 import model.GameScore;
 import model.PlayableMapTableModel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GameView extends JPanel {
-    private static final int ROWS = 25;
-    private static final int COLS = 40;
+    private final int ROWS;
+    private final int COLS;
+    private int cellSize = 24;
 
     private Map<CellType, ImageIcon> icons;
 
@@ -30,10 +35,13 @@ public class GameView extends JPanel {
 
     private Pacman pacman;
 
-    public GameView(RootView rootView) {
+    public GameView(RootView rootView, int width, int height) {
+        this.COLS = width;
+        this.ROWS = height;
+
         this.frame = rootView.getFrame();
 
-        initImages();
+        loadImages();
         generateScoreLabel();
         generateMap();
         styleComponents();
@@ -74,43 +82,67 @@ public class GameView extends JPanel {
         scrollPane.setViewportView(tableHolder);
         scrollPane.setFocusable(false);
 
-        ResizeHandler resizeListener = new ResizeHandler(mapTable, scrollPane);
+        ResizeHandler resizeListener = new ResizeHandler(mapTable, scrollPane, this);
         scrollPane.addComponentListener(resizeListener);
         this.dispatchEvent(new ComponentEvent(this, ComponentEvent.COMPONENT_RESIZED));
     }
 
     private void generateScoreLabel() {
-        this.scoreLabel = new JLabel("NASDAQ", SwingConstants.CENTER);
+        this.scoreLabel = new JLabel("", SwingConstants.CENTER);
         this.score = new GameScore(scoreLabel);
     }
 
     private void styleComponents() {
-        // Placement and initialization
         setLayout(new BorderLayout());
         add(scoreLabel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Table
         mapTable.setShowGrid(false);
         mapTable.setBackground(Color.BLACK);
         setBackground(Color.BLACK);
         scrollPane.getViewport().setBackground(Color.BLACK);
         scrollPane.setBorder(null);
 
-        // Score label
         scoreLabel.setFont(new Font(Font.MONOSPACED, Font.BOLD, 24));
         scoreLabel.setForeground(Color.WHITE);
         scoreLabel.setBackground(Color.BLACK);
 
-        // Frame
         this.setBackground(Color.BLACK);
         this.frame.setSize(1200, 800);
         this.frame.setLocationRelativeTo(null);
         this.frame.setResizable(true);
     }
 
-    private void initImages() {
+    private ImageIcon loadAndScaleImageIcon(String imageFileName) {
+        URL url = getClass().getResource("/images/" + imageFileName);
+        int size = this.cellSize;
+        if (imageFileName != "wall.png") size = (size / 3) * 2;
+        else size = (int) (1.5 * size);
+        ImageIcon icon = new ImageIcon(url);
+        Image img = icon.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
+    }
+
+    public void loadImages() {
         this.icons = new HashMap<>();
-        icons.put(CellType.WALL, new ImageIcon("pacman.png"));
+
+        icons.put(CellType.WALL, loadAndScaleImageIcon("wall.png"));
+
+        // entities
+        icons.put(CellType.GHOST, loadAndScaleImageIcon("ghost.png"));
+        icons.put(CellType.GHOST_HARMLESS, loadAndScaleImageIcon("ghost-harmless.png"));
+        icons.put(CellType.PACMAN, loadAndScaleImageIcon("pacman.png"));
+        icons.put(CellType.POINT, loadAndScaleImageIcon("point.png"));
+
+        // powerups
+        icons.put(CellType.POWERUP_EXTRA_LIFE, loadAndScaleImageIcon("heart.png"));
+        icons.put(CellType.POWERUP_FREEZE, loadAndScaleImageIcon("snowflakes.png"));
+        icons.put(CellType.POWERUP_SLOW_GHOSTS, loadAndScaleImageIcon("snail.png"));
+        icons.put(CellType.POWERUP_HARMLESS_GHOSTS, loadAndScaleImageIcon("knife.png"));
+        icons.put(CellType.POWERUP_SPEED_UP, loadAndScaleImageIcon("speedup.png"));
+    }
+
+    public void setCellSize(int value){
+        this.cellSize = value;
     }
 }

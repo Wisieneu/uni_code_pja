@@ -46,7 +46,6 @@ class GameplayControls {
     static class HardResetAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("hardReset");
             RootView.instance.switchTo(new MenuView(RootView.instance));
         }
     }

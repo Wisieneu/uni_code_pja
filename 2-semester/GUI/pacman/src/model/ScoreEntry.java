@@ -1,6 +1,8 @@
 package model;
 
-public class ScoreEntry {
+import java.io.Serializable;
+
+public class ScoreEntry implements Serializable {
     private String name;
     private int score;
 
@@ -15,5 +17,10 @@ public class ScoreEntry {
 
     public int getScore() {
         return score;
+    }
+
+    @Override
+    public String toString() {
+        return name + " - " + score;
     }
 }

@@ -15,10 +15,12 @@ public abstract class AbstractPowerup extends AbstractEntity {
 
     public static AbstractPowerup getRandomPowerup() {
         AbstractPowerup[] arr = new AbstractPowerup[]{
-                new PointPickup(),
                 new FreezePowerupPickup(),
-                new DisableWallCollisionPowerupPickup()
+                new SlowDownGhostsPowerupPickup(),
+                new ExtraLifePowerupPickup(),
+                new HarmlessGhostsPowerupPickup(),
+                new SpeedUpPowerupPickup()
         };
-        return arr[(int) (Math.random() * (arr.length - 1))];
+        return arr[(int) (Math.random() * (arr.length))];
     }
 }

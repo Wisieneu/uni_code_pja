@@ -5,7 +5,7 @@ import model.CellType;
 
 public abstract class AbstractEntity {
     private boolean isMovable;
-    private final CellType cellType;
+    private CellType cellType;
 
     protected int xPosition;
     protected int yPosition;
@@ -44,6 +44,7 @@ public abstract class AbstractEntity {
             this.setX(newX);
             GameController.instance.getMapModel().setCellValue(newX, newY, this.cellType);
             GameController.instance.getMapModel().setEntityAt(newX, newY, this);
+            this.lastMoved = time;
         }
     }
 
@@ -79,5 +80,17 @@ public abstract class AbstractEntity {
         return cellType;
     }
 
+    public void setCellType(CellType cellType) {
+        this.cellType = cellType;
+    }
+
+    public void setMoveCooldown(int value) {
+        this.moveCooldown = value;
+    }
+
     public abstract void onPickup();
+
+    public void setSpeed(int value) {
+        this.moveCooldown = value;
+    }
 }

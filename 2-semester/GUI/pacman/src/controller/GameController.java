@@ -4,6 +4,7 @@ import entities.*;
 import model.GameScore;
 import model.PlayableMapTableModel;
 import view.RootView;
+import view.SubmitScoreView;
 
 import java.util.List;
 
@@ -27,8 +28,9 @@ public class GameController {
     }
 
     public void initAll() {
-//        this.initGhostMover();
+        this.initGhostMover();
         gameScore.initCounter();
+        new PowerupSpawner(this.ghosts).start();
     }
 
     private void initGhostMover() {
@@ -37,12 +39,30 @@ public class GameController {
         }
     }
 
+    public void addLife() {
+        this.getScoreObj().addLife();
+    }
+
     public void freezeGhosts(int duration) {
-        new GhostFreezeTimer(ghosts, duration).start();
+        new GhostFreezeTimer(this.ghosts, duration).start();
+    }
+
+    public void makePacmanLethal(int duration) {
+        new HarmlessGhostsTimer(this.ghosts, duration).start();
     }
 
     public void disableWallCollision(int duration) {
+        new SlowDownGhostsTimer(duration).start();
+    }
 
+    public void setGhostSpeed(int value) {
+        for (Ghost ghost : GameController.instance.getMapModel().getGhostsArr()) {
+            ghost.setSpeed(value);
+        }
+    }
+
+    public void pacmanSpeedUpTrigger(int duration) {
+        new SpeedUpTimer(this.pacman, duration).start();
     }
 
     public PlayableMapTableModel getMapModel() {
@@ -52,11 +72,12 @@ public class GameController {
     public void killPlayer() {
         this.getScoreObj().reduceLife();
         this.getPacman().respawn();
-        freezeGhosts(5);
+        freezeGhosts(4);
     }
 
     public void endGame() {
-
+        instance = null;
+        rootView.switchTo(new SubmitScoreView(rootView, gameScore.getScore()));
     }
 
     public GameScore getScoreObj() {
@@ -66,4 +87,5 @@ public class GameController {
     public Pacman getPacman() {
         return this.pacman;
     }
+
 }

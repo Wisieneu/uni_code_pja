@@ -28,9 +28,6 @@ public class PlayableMapTableModel extends AbstractTableModel {
     private Pacman pacman;
 
     public PlayableMapTableModel(int width, int height) {
-//        if (width < 10 || width > 100)
-//            throw new Exception("Width and height can only take 10 - 100 values");
-
         this.maxX = width - 1;
         this.maxY = height - 1;
 
@@ -75,7 +72,7 @@ public class PlayableMapTableModel extends AbstractTableModel {
 
             if (newX > -1 && newX < this.maxX && newY > -1 && newY < this.maxY
                     && getCellValue(newX, newY) == CellType.WALL) {
-                setCellValue(x + drc[0], y + drc[1], CellType.POINT);
+                setCellValue(x + drc[0], y + drc[1], CellType.POINT); // check all directions
                 generateMapMaze(newX, newY);
             }
         }
@@ -92,18 +89,17 @@ public class PlayableMapTableModel extends AbstractTableModel {
         for (int y = 1; y < this.maxY; y++) {
             setCellValue(1, y, CellType.POINT);
             setCellValue(this.maxX - 1, y, CellType.POINT);
-            ;
         }
 
         // Middle columns
-        for (int x = this.maxX / 3; x < this.maxX - 1; x += this.maxX / 3) {
+        for (int x = (int) Math.sqrt((double)this.maxX); x < this.maxX - 1; x += (int) Math.sqrt((double)this.maxX)) {
             for (int y = 1; y < this.maxY; y++) {
                 setCellValue(x, y, CellType.POINT);
             }
         }
 
         // Middle rows
-        for (int y = this.maxY / 3; y < this.maxY; y += this.maxY / 3) {
+        for (int y = (int) Math.sqrt((double)this.maxY); y < this.maxY; y += (int) Math.sqrt((double)this.maxY)) {
             for (int x = 1; x < this.maxX; x++) {
                 setCellValue(x, y, CellType.POINT);
             }
@@ -112,17 +108,17 @@ public class PlayableMapTableModel extends AbstractTableModel {
         // Eliminate wide corridors
         for (int y = 1; y < this.maxY; y++) {
             for (int x = 1; x < this.maxX; x++) {
-                if (getCellValue(x, y) == CellType.EMPTY) {
+                if (getCellValue(x, y) == CellType.EMPTY || getCellValue(x, y) == CellType.POINT) {
                     // check how many tiles are not walls, including corners
                     int surroundingEmptyTilesCount = 0;
                     for (int x1 = -1; x1 < 2; x1++) {
                         for (int y1 = -1; y1 < 2; y1++) {
-                            if (getCellValue(x + x1, y + y1) == CellType.EMPTY)
+                            CellType cell = getCellValue(x + x1, y + y1);
+                            if (cell == CellType.EMPTY || cell == CellType.POINT)
                                 surroundingEmptyTilesCount++;
                         }
                     }
-                    System.out.println();
-                    if (surroundingEmptyTilesCount > 7) {
+                    if (surroundingEmptyTilesCount > 8) {
                         setCellValue(x, y, CellType.WALL);
                     }
                 }
@@ -171,6 +167,9 @@ public class PlayableMapTableModel extends AbstractTableModel {
     }
 
     private void setStartPacmanLocation(int x, int y) {
+        if (x < 1 || y < 1 || x > maxX || y > maxY) {
+            setStartPacmanLocation(spawnPointX + 1, spawnPointY + (COLS / 4) - 1);
+        }
         if (getCellValue(x, y) == CellType.EMPTY || getCellValue(x, y) == CellType.POINT) {
             this.pacman = new Pacman(x, y);
             setEntityAt(x, y, this.pacman);

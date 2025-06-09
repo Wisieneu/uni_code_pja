@@ -1,14 +1,15 @@
 package controller;
 
 import entities.Ghost;
+import model.CellType;
 
 import java.util.List;
 
-public class GhostFreezeTimer extends Thread {
+public class HarmlessGhostsTimer extends Thread {
     private final List<Ghost> ghosts;
     private final int duration;
 
-    public GhostFreezeTimer(List<Ghost> ghosts, int duration) {
+    public HarmlessGhostsTimer(List<Ghost> ghosts, int duration) {
         this.ghosts = ghosts;
         this.duration = duration;
     }
@@ -17,7 +18,8 @@ public class GhostFreezeTimer extends Thread {
     public void run() {
         synchronized (ghosts) {
             for (Ghost ghost : this.ghosts) {
-                ghost.setIsFrozen(true);
+                ghost.setIsLethal(false);
+                ghost.setCellType(CellType.GHOST_HARMLESS);
             }
         }
 
@@ -29,7 +31,8 @@ public class GhostFreezeTimer extends Thread {
 
         synchronized (ghosts) {
             for (Ghost ghost : this.ghosts) {
-                ghost.setIsFrozen(false);
+                ghost.setIsLethal(true);
+                ghost.setCellType(CellType.GHOST);
             }
         }
     }

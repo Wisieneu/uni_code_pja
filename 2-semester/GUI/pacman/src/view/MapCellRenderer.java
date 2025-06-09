@@ -1,5 +1,6 @@
 package view;
 
+import controller.GameController;
 import model.CellType;
 
 import javax.swing.*;
@@ -26,23 +27,17 @@ public class MapCellRenderer extends JLabel implements TableCellRenderer {
         ImageIcon icon = icons.get(cellType);
 
         if (icon != null) {
-            int cellWidth = table.getColumnModel().getColumn(column).getWidth();
-            int cellHeight = table.getRowHeight(row);
-            Image img = icon.getImage().getScaledInstance(cellWidth, cellHeight, Image.SCALE_SMOOTH);
-
-            setIcon(new ImageIcon(img));
+            setIcon(icon);
             setText("");
         } else {
             setIcon(null);
         }
 
-//        if (cellType == CellType.WALL) {
-//            setBackground(Color.BLUE);
-//        } else if (cellType == CellType.SPAWNING_POOL) {
-//            setBackground(Color.PINK);
-//        } else {
-//            setBackground(Color.DARK_GRAY);
-//        }
+        if (cellType == CellType.SPAWNING_POOL) {
+            setBackground(Color.PINK);
+        } else {
+            setBackground(Color.DARK_GRAY);
+        }
 
         return this;
     }

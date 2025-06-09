@@ -8,11 +8,13 @@ import javax.swing.*;
 public class Pacman extends AbstractEntity {
     int xPosition;
     int yPosition;
+    long playerLastMoved;
 
     public Pacman(int x, int y) {
         super(CellType.PACMAN, true, x, y);
         this.xPosition = x;
         this.yPosition = y;
+        this.moveCooldown = 200;
     }
 
     @Override
@@ -28,11 +30,12 @@ public class Pacman extends AbstractEntity {
 
         super.move(direction);
 
-        if (isMoveLegal(newX, newY) && time - this.lastMoved > this.moveCooldown) {
+        if (isMoveLegal(newX, newY) && time - this.playerLastMoved > this.moveCooldown) {
             controller.getMapModel().setCellValue(oldX, oldY, CellType.EMPTY);
             controller.getMapModel().setCellValue(newX, newY, CellType.PACMAN);
             walkedOver.onPickup();
-            this.lastMoved = time;
+            this.playerLastMoved = time;
+
         }
     }
 

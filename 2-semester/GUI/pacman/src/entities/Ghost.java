@@ -15,6 +15,7 @@ public class Ghost extends AbstractEntity {
         this.isChasing = true;
         this.isFrozen = false;
         this.standingOver = new PointPickup();
+        this.moveCooldown = 400;
     }
 
     public void setLethal(boolean setVal) {
@@ -31,7 +32,9 @@ public class Ghost extends AbstractEntity {
 
     public void respawn() {
         GameController controller = GameController.instance;
-        controller.getMapModel().setCellValue(this.getX(), this.getY(), CellType.EMPTY);
+        if (controller.getPacman().getX() != this.getX() && controller.getPacman().getY() != this.getY()) {
+            controller.getMapModel().setCellValue(this.getX(), this.getY(), CellType.EMPTY);
+        }
 
         int[] spawn = GameController.instance.getMapModel().getSpawnCords();
 
@@ -41,13 +44,15 @@ public class Ghost extends AbstractEntity {
         this.setY(spawn[1]);
 
         this.doesDropPowerup = false;
-        this.standingOver = new PointPickup();
+        this.standingOver = new SpawningPoolEntity();
         GameController.instance.getMapModel().setEntityAt(this.getX(), this.getY(), this);
     }
 
     @Override
     public void move(int[] direction) {
-        if (this.isFrozen) return;
+        if (this.isFrozen)
+            return;
+
         int oldX = this.getX();
         int oldY = this.getY();
         int newX = oldX + direction[0];
@@ -55,26 +60,28 @@ public class Ghost extends AbstractEntity {
         GameController controller = GameController.instance;
         long time = System.currentTimeMillis();
 
-        if (this.doesDropPowerup) {
-            this.doesDropPowerup = false;
-            this.standingOver = AbstractPowerup.getRandomPowerup();
-        }
         if (isMoveLegal(newX, newY) && time - this.lastMoved > this.moveCooldown) {
-            if (standingOver != null)
+            Pacman pacman = controller.getPacman();
+            if (pacman.getX() == newX && pacman.getY() == newY) {
+                this.onPickup();
+                return;
+            }
+
+            if (standingOver == null || standingOver == GameController.instance.getPacman() || standingOver.getCellType() == CellType.GHOST || standingOver.getCellType() == CellType.GHOST_HARMLESS)
                 this.standingOver = new PointPickup();
+
+            if (this.doesDropPowerup) {
+                this.standingOver = AbstractPowerup.getRandomPowerup();
+                this.doesDropPowerup = false;
+            }
+
             controller.getMapModel().setCellValue(oldX, oldY, this.standingOver.getCellType());
             controller.getMapModel().setEntityAt(oldX, oldY, this.standingOver);
 
             this.standingOver = controller.getMapModel().getEntityAt(newX, newY);
 
-            Pacman pacman = controller.getPacman();
-            if (pacman.getX() == newX && pacman.getY() == newY) {
-                System.out.println("ghost kill");
-                System.out.println("pacman cords ======== " + controller.getPacman().getX() + " " + controller.getPacman().getY());
-                System.out.println();
-                controller.killPlayer();
-            }
         }
+
         super.move(direction);
     }
 
@@ -104,10 +111,8 @@ public class Ghost extends AbstractEntity {
                 dx = (int) (-1 + Math.random() * 3);
         }
 
-        // DEBUG:TODO:
         int newX = this.getX() + dx;
         int newY = this.getY() + dy;
-        System.out.println("moving from " + this.getX() + " " + this.getY() + " to " + newX + " " + newY + ", walking over: " + GameController.instance.getMapModel().getCellValue(newX, newY));
 
         move(new int[]{dx, dy});
     }
@@ -116,11 +121,14 @@ public class Ghost extends AbstractEntity {
         this.isFrozen = frozenState;
     }
 
+    public void setIsLethal(boolean lethalState) {
+        this.isLethal = lethalState;
+    }
+
     public void onPickup() {
         if (this.isLethal) {
             GameController.instance.killPlayer();
             this.respawn();
-            System.out.println("game over");
         } else {
             this.respawn();
         }

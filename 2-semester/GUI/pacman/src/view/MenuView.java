@@ -10,11 +10,8 @@ public class MenuView extends JPanel {
     public MenuView(RootView rootView) {
         this.rootView = rootView;
         this.frame = rootView.getFrame();
-
         buildComponents();
-
         frame.setSize(600, 600);
-        frame.setResizable(false);
         this.setName("Menu");
     }
 
@@ -32,7 +29,7 @@ public class MenuView extends JPanel {
         add(Box.createVerticalStrut(40));
 
         JButton startBtn = createMenuButton("START GAME");
-        startBtn.addActionListener(e -> rootView.switchTo(new GameView(rootView)));
+        startBtn.addActionListener(e -> rootView.switchTo(new PreGameView(rootView)));
         add(startBtn);
 
         add(Box.createVerticalStrut(20));
@@ -56,7 +53,6 @@ public class MenuView extends JPanel {
         btn.setFont(new Font(Font.MONOSPACED, Font.BOLD, 24));
         btn.setBackground(Color.BLACK);
         btn.setForeground(Color.GREEN);
-        btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return btn;
